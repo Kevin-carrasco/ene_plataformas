@@ -1,0 +1,7 @@
+"0","base_plataformas %>% sjPlot::sjt.xtab(sexo, cine,
+                 show.summary = F, emph.total = T, 
+                 weight.by = fact_cal,
+                 encoding = ""UTF-8"")
+"
+"2","Error: objeto 'sexo' no encontrado
+"

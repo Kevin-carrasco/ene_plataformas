@@ -1,0 +1,81 @@
+---
+title: "analisis"
+output: html_document
+date: "2023-12-19"
+---
+
+```{r}
+pacman::p_load(haven, dplyr, survey, srvyr, ggplot2, sjlabelled)
+# base procesada
+load(file="input/data/proc/base_plataformas.RData")
+# base original para comparación
+# Cargar ene 2023 Agosto-sept-octubre
+data_aso<-read_sav("input/data/original/ene-2023-09-aso.sav")
+```
+
+```{r}
+base_aso <- data_aso %>% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
+table(base_aso$pd_especifique)
+```
+
+```{r}
+data_aso <- data_aso %>% set_na(., na = c(88, 99))
+data_aso$plataformas_digitales <- sjlabelled::as_factor(data_aso$plataformas_digitales)
+ds_test <- data_aso %>% as_survey_design(ids = 1,
+                                         strata = estrato,
+                                         weights = fact_cal)
+ds_test %>% group_by(plataformas_digitales) %>% summarise(cantidad=survey_total(na.rm = TRUE))
+```
+
+
+```{r}
+# Filtramos manualmente solo apps de delivery
+base <- base_aso %>% filter(pd_especifique %in% c("APLICACION DE PEDIDOS YA", "CORNERSHOP", "EUBER EAST", "JUMBO SHOPPERS", "PEDIDOS YA", "RAPPI", "UBER EATS", "UBEREATS", "WABI") | sda_pd_especifique %in% c("CORNERSHOP", "PEDIDOS YA", "RAPPI", "UBER EATS"))
+base %>% sjmisc::descr(edad, weights = fact_cal)
+```
+
+
+```{r}
+base_plataformas$cine <- sjlabelled::as_factor(base_plataformas$cine)
+ds <- base_plataformas %>% as_survey_design(ids = 1,
+                                weights = fact_cal)
+
+```
+
+```{r}
+## Con error estandar
+ds %>% group_by(cine) %>% summarise(educacion=survey_total(na.rm = TRUE))
+```
+
+## Exploración del nivel educacional de trabajadores de plataformas
+
+```{r}
+ds %>% group_by(cine) %>% 
+  summarise(educacion=survey_total(na.rm = TRUE, vartype=c("ci"),level=c(0.95))) %>%
+  ggplot(aes(x=cine,y=educacion,fill=cine))+
+  geom_bar(stat = "identity") +
+  ylab(label="Cantidad")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  geom_errorbar(aes(ymin=educacion_low, ymax=educacion_upp),
+                  width=0.2, position=position_dodge(.9)) +
+  guides(fill = FALSE)
+```
+
+## Exploración relación entre variables
+
+```{r}
+sjPlot::sjt.xtab(base_plataformas$sexo, base_plataformas$cine,
+                 show.summary = F, emph.total = T,
+                 encoding = "UTF-8")
+```
+
+```{r}
+sjPlot::sjt.xtab(base_plataformas$sexo, base_plataformas$cine,
+                 show.summary = F, emph.total = T, 
+                 weight.by = base_plataformas$fact_cal,
+                 encoding = "UTF-8")
+```
+
+
+
+

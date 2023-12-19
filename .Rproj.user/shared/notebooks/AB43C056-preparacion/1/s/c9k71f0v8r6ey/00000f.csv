@@ -1,0 +1,4 @@
+"0","base_amj %>% sjmisc::descr(edad, weights = fact_cal)
+"
+"2","Error: objeto 'base_amj' no encontrado
+"

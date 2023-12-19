@@ -1,0 +1,7 @@
+"0","ds_test %>%
+  group_by(plataformas_digitales) %>%
+  summarise(total = survey_total(na.rm = TRUE, vartype = c(""ci""), level = c(0.95))) %>%
+```
+"
+"2","Error: se intenta usar un nombre de varible de longitud cero
+"
