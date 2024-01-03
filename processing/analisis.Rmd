@@ -5,40 +5,111 @@ date: "2023-12-19"
 ---
 
 ```{r}
-pacman::p_load(haven, dplyr, survey, srvyr, ggplot2, sjlabelled)
+pacman::p_load(haven, dplyr, survey, srvyr, ggplot2, sjlabelled, summarytools)
 # base procesada
 load(file="input/data/proc/base_plataformas.RData")
 # base original para comparación
 # Cargar ene 2023 Agosto-sept-octubre
-data_aso<-read_sav("input/data/original/ene-2023-09-aso.sav")
-```
-
-```{r}
-base_aso <- data_aso %>% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
-table(base_aso$pd_especifique)
-```
-
-```{r}
-data_aso <- data_aso %>% set_na(., na = c(88, 99))
-data_aso$plataformas_digitales <- sjlabelled::as_factor(data_aso$plataformas_digitales)
-ds_test <- data_aso %>% as_survey_design(ids = 1,
-                                         strata = estrato,
-                                         weights = fact_cal)
-ds_test %>% group_by(plataformas_digitales) %>% summarise(cantidad=survey_total(na.rm = TRUE))
 ```
 
 
 ```{r}
-# Filtramos manualmente solo apps de delivery
-base <- base_aso %>% filter(pd_especifique %in% c("APLICACION DE PEDIDOS YA", "CORNERSHOP", "EUBER EAST", "JUMBO SHOPPERS", "PEDIDOS YA", "RAPPI", "UBER EATS", "UBEREATS", "WABI") | sda_pd_especifique %in% c("CORNERSHOP", "PEDIDOS YA", "RAPPI", "UBER EATS"))
-base %>% sjmisc::descr(edad, weights = fact_cal)
+base_plataformas <- base_plataformas %>% set_na(., na = c(77, 88, 99))
+base_plataformas <- base_plataformas %>% dplyr::select(region, 
+                                                       tramo_edad, 
+                                                       sexo, 
+                                                       nacionalidad, 
+                                                       cine, 
+                                                       b7a_1, 
+                                                       b7a_2, 
+                                                       b7a_3, 
+                                                       b7b_1, 
+                                                       b8, 
+                                                       ocup_honorarios, 
+                                                       b17_ano, 
+                                                       turno,
+                                                       fact_anual) %>% as.data.frame()
+labels <- base_plataformas
 ```
 
 
 ```{r}
-base_plataformas$cine <- sjlabelled::as_factor(base_plataformas$cine)
+# labels
+base_plataformas$region <- factor(base_plataformas$region, labels = c("Antofagasta", "Atacama", "Coquimbo", "Valparaíso", "O'Higgins", "Maule", "Biobío", "Araucanía", "Los Lagos", "Magallanes", "Metropolitana", "Los Ríos", "Arica y Parinacota", "Ñuble"))
+base_plataformas$tramo_edad <- factor(base_plataformas$tramo_edad, labels = c("15 a 19 años", "20 a 24 años", "25 a 29 años", "30 a 34 años", "35 a 39 años", "40 a 44 años", "45 a 49 años", "50 a 54 años", "60 a 64 años"))
+base_plataformas$sexo <- factor(base_plataformas$sexo, labels = c("Hombre", "Mujer")) # sexo
+base_plataformas$nacionalidad <- factor(base_plataformas$nacionalidad, labels = c("Argentina", "Chile", "Colombia", "Paraguay", "Perú", "Venezuela")) # migrante
+base_plataformas$cine <- factor(base_plataformas$cine, labels = c("Educación primaria", "Educación secundaria", "Educación técnica", "Educación universitaria", "Postítulos y maestría")) # educacion
+
+base_plataformas$b7a_1 <- factor(base_plataformas$b7a_1, levels = c(1, 2), labels = c("Si", "No")) # pension
+base_plataformas$b7a_2 <- factor(base_plataformas$b7a_2, levels = c(1, 2), labels = c("Si", "No")) # salud
+base_plataformas$b7a_3 <- factor(base_plataformas$b7a_3, levels = c(1, 2), labels = c("Si", "No")) # desempleo
+base_plataformas$b7b_1 <- factor(base_plataformas$b7b_1, levels = c(1, 2), labels = c("Si", "No")) # vacaciones
+base_plataformas$b8 <- factor(base_plataformas$b8, levels = c(1, 2), labels = c("Si", "No")) # contrato
+base_plataformas$ocup_honorarios <- factor(base_plataformas$ocup_honorarios, levels = c(1, 2, 3), labels = c("Si", "No", "No sabe")) # boleta
+
+#base_plataformas$b17_ano <- factor(base_plataformas$b17_ano) # Año ingreso
+#base_plataformas$c1 <- sjlabelled::as_factor(base_plataformas$c1) # Tipo jornada
+base_plataformas$turno <- factor(base_plataformas$turno, levels = c(1, 2), labels = c("Si", "No")) # Turnos
+#base_plataformas$habituales <- sjlabelled::as_factor(base_plataformas$habituales) # horas habituales
+
+#label
+base_plataformas$region <- sjlabelled::set_label(x = base_plataformas$region, 
+                      label = get_label(labels$region))
+base_plataformas$tramo_edad <- sjlabelled::set_label(x = base_plataformas$tramo_edad, 
+                      label = get_label(labels$tramo_edad))
+base_plataformas$sexo <- sjlabelled::set_label(x = base_plataformas$sexo, 
+                      label = get_label(labels$sexo)) # sexo
+base_plataformas$nacionalidad <- sjlabelled::set_label(x = base_plataformas$nacionalidad, 
+                      label = get_label(labels$nacionalidad)) # migrante
+base_plataformas$cine <- sjlabelled::set_label(x = base_plataformas$cine, 
+                      label = get_label(labels$cine)) # educacion
+
+base_plataformas$b7a_1 <- sjlabelled::set_label(x = base_plataformas$b7a_1, 
+                      label = get_label(labels$b7a_1)) # pension
+base_plataformas$b7a_2 <- sjlabelled::set_label(x = base_plataformas$b7a_2, 
+                      label = get_label(labels$b7a_2)) # salud
+base_plataformas$b7a_3 <- sjlabelled::set_label(x = base_plataformas$b7a_3, 
+                      label = get_label(labels$b7a_3)) # desempleo
+base_plataformas$b7b_1 <- sjlabelled::set_label(x = base_plataformas$b7b_1, 
+                      label = get_label(labels$b7b_1)) # vacaciones
+base_plataformas$b8 <- sjlabelled::set_label(x = base_plataformas$b8, 
+                      label = get_label(labels$b8)) # contrato
+base_plataformas$ocup_honorarios <- sjlabelled::set_label(x = base_plataformas$ocup_honorarios, 
+                      label = get_label(labels$ocup_honorarios)) # boleta
+
+#base_plataformas$b17_ano <- sjlabelled::set_label(x = base_plataformas$b17_ano, 
+#                      label = get_label(labels$b17_ano)) # Año ingreso
+#base_plataformas$c1 <- sjlabelled::as_factor(base_plataformas$c1) # Tipo jornada
+base_plataformas$turno <- sjlabelled::set_label(x = base_plataformas$turno, 
+                      label = get_label(labels$turno)) # Turnos
+
+```
+
+# Descriptivos condiciones laborales
+
+```{r, results="asis", warning=FALSE}
+df1 <- base_plataformas %>%
+  dfSummary(.,
+               plain.ascii = FALSE,
+               style = "grid",
+               tmp.img.dir = "/tmp",
+               graph.magnif = 0.75,
+               headings = F,  # encabezado
+               varnumbers = F, # num variable
+               labels.col = T, # etiquetas
+               na.col = T,    # missing
+               graph.col = F, # plot
+               valid.col = T, # n valido
+               max.distinct.values = 15,
+            display.labels = TRUE)
+df1$Variable <- NULL
+print(df1, method = "render")
+```
+
+```{r}
 ds <- base_plataformas %>% as_survey_design(ids = 1,
-                                weights = fact_cal)
+                                weights = fact_anual)
 
 ```
 
@@ -47,7 +118,61 @@ ds <- base_plataformas %>% as_survey_design(ids = 1,
 ds %>% group_by(cine) %>% summarise(educacion=survey_total(na.rm = TRUE))
 ```
 
-## Exploración del nivel educacional de trabajadores de plataformas
+## Región
+
+```{r}
+ds %>% group_by(region) %>% 
+  summarise(region_y=survey_total(na.rm = TRUE, vartype=c("ci"),level=c(0.95))) %>%
+  ggplot(aes(x=region,y=region_y,fill=region))+
+  geom_bar(stat = "identity") +
+  ylab(label="Cantidad")+
+  geom_errorbar(aes(ymin=region_y_low, ymax=region_y_upp),
+                  width=0.2, position=position_dodge(.9)) +
+  guides(fill = FALSE)
+```
+
+## Edad
+
+```{r}
+ds %>% group_by(tramo_edad) %>% 
+  summarise(edad=survey_total(na.rm = TRUE, vartype=c("ci"),level=c(0.95))) %>%
+  ggplot(aes(x=tramo_edad,y=edad,fill=tramo_edad))+
+  geom_bar(stat = "identity") +
+  ylab(label="Cantidad")+
+  geom_errorbar(aes(ymin=edad_low, ymax=edad_upp),
+                  width=0.2, position=position_dodge(.9)) +
+  guides(fill = FALSE)+
+  scale_x_discrete(labels = get_labels(base_plataformas$tramo_edad))
+```
+
+## Sexo
+
+```{r}
+ds %>% group_by(sexo) %>% 
+  summarise(sexo_y=survey_total(na.rm = TRUE, vartype=c("ci"),level=c(0.95))) %>%
+  ggplot(aes(x=sexo,y=sexo_y,fill=sexo))+
+  geom_bar(stat = "identity") +
+  ylab(label="Cantidad")+
+  geom_errorbar(aes(ymin=sexo_y_low, ymax=sexo_y_upp),
+                  width=0.2, position=position_dodge(.9)) +
+  guides(fill = FALSE)+
+  scale_x_discrete(labels = get_labels(base_plataformas$sexo))
+```
+
+## Nacionalidad
+
+```{r}
+ds %>% group_by(nacionalidad) %>% 
+  summarise(nacionalidad_y=survey_total(na.rm = TRUE, vartype=c("ci"),level=c(0.95))) %>%
+  ggplot(aes(x=nacionalidad,y=nacionalidad_y,fill=nacionalidad))+
+  geom_bar(stat = "identity") +
+  ylab(label="Cantidad")+
+  geom_errorbar(aes(ymin=nacionalidad_y_low, ymax=nacionalidad_y_upp),
+                  width=0.2, position=position_dodge(.9)) +
+  guides(fill = FALSE)
+```
+
+## Nivel educacional de trabajadores de plataformas
 
 ```{r}
 ds %>% group_by(cine) %>% 
@@ -61,21 +186,50 @@ ds %>% group_by(cine) %>%
   guides(fill = FALSE)
 ```
 
+## Contrato de trabajo de trabajadores de plataformas
+
+```{r}
+ds %>% group_by(b8) %>% 
+  summarise(contrato=survey_total(na.rm = TRUE, vartype=c("ci"),level=c(0.95))) %>%
+  ggplot(aes(x=b8,y=contrato,fill=b8))+
+  geom_bar(stat = "identity") +
+  ylab(label="Cantidad")+
+  geom_errorbar(aes(ymin=contrato_low, ymax=contrato_upp),
+                  width=0.2, position=position_dodge(.9)) +
+  guides(fill = FALSE)+
+  scale_x_discrete(labels = get_labels(base_plataformas$b8))
+```
+
+
+
+
 ## Exploración relación entre variables
 
 ```{r}
 sjPlot::sjt.xtab(base_plataformas$sexo, base_plataformas$cine,
+                 show.summary = F, emph.total = T, 
+                 weight.by = base_plataformas$fact_anual,
+                 encoding = "UTF-8")
+```
+
+
+```{r}
+sjPlot::sjt.xtab(base_plataformas$sexo, base_plataformas$b8,
                  show.summary = F, emph.total = T,
+                 weight.by = base_plataformas$fact_anual,
                  encoding = "UTF-8")
 ```
 
 ```{r}
-sjPlot::sjt.xtab(base_plataformas$sexo, base_plataformas$cine,
-                 show.summary = F, emph.total = T, 
-                 weight.by = base_plataformas$fact_cal,
+sjPlot::sjt.xtab(base_plataformas$sexo, base_plataformas$nacionalidad,
+                 show.summary = F, emph.total = T,
+                 weight.by = base_plataformas$fact_anual,
                  encoding = "UTF-8")
 ```
 
-
-
-
+```{r}
+sjPlot::sjt.xtab(base_plataformas$sexo, base_plataformas$tramo_edad,
+                 show.summary = F, emph.total = T,
+                 weight.by = base_plataformas$fact_anual,
+                 encoding = "UTF-8")
+```

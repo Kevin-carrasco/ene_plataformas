@@ -3,7 +3,7 @@
     "path": "~/ene_plataformas/processing/analisis.Rmd",
     "project_path": "processing/analisis.Rmd",
     "type": "r_markdown",
-    "hash": "999397834",
+    "hash": "1562233680",
     "contents": "",
     "dirty": false,
     "created": 1703018249752.0,
@@ -13,15 +13,15 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "27,0",
-        "scrollLine": "17"
+        "cursorPosition": "228,0",
+        "scrollLine": "213"
     },
     "folds": "",
-    "lastKnownWriteTime": 1703021203,
+    "lastKnownWriteTime": 1704255175,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1703021203436,
+    "last_content_update": 1704255175137,
     "read_only": false,
     "read_only_alternatives": []
 }

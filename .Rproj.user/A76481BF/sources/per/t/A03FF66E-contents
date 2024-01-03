@@ -7,6 +7,8 @@ date: "2023-12-19"
 ```{r}
 pacman::p_load(haven, dplyr)
 
+# Cargar ene 2022
+data_2022<-read_sav("input/data/original/ano-2022.sav")
 # Cargar ene 2023 Agosto-sept-octubre
 data_aso<-read_sav("input/data/original/ene-2023-09-aso.sav")
 # Cargar ene 2023 junio-agosto-sept
@@ -17,15 +19,21 @@ data_amj<-read_sav("input/data/original/ene-2022-05-amj.sav")
 ```
 
 ```{r}
+base_2022 <- data_2022 %>% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
+
 base_aso <- data_aso %>% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
 base_jas <- data_jas %>% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
-base_amj <- data_amj %>% dplyr::filter(plataformas_digitales==1) # Primera o segunda actividad en aplicación o internet
+base_amj <- data_amj %>% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
 
 table(base_aso$pd_especifique)
 table(base_aso$sda_pd_especifique)
 
+
 # Filtramos manualmente solo apps de delivery
-base_plataformas <- base_aso %>% filter(pd_especifique %in% c("APLICACION DE PEDIDOS YA", "CORNERSHOP", "EUBER EAST", "JUMBO SHOPPERS", "PEDIDOS YA", "RAPPI", "UBER EATS", "UBEREATS", "WABI") | sda_pd_especifique %in% c("CORNERSHOP", "PEDIDOS YA", "RAPPI", "UBER EATS"))
+#base_plataformas <- base_aso %>% filter(pd_especifique %in% c("APLICACION DE PEDIDOS YA", "CORNERSHOP", "EUBER EAST", "JUMBO SHOPPERS", "PEDIDOS YA", "RAPPI", "UBER EATS", "UBEREATS", "WABI") | sda_pd_especifique %in% c("CORNERSHOP", "PEDIDOS YA", "RAPPI", "UBER EATS"))
+
+# Filtramos manualmente solo apps de delivery
+base_plataformas <- base_2022 %>% filter(pd_especifique %in% c("CORNERSHOP", "DELIVERY", "JUMBO SHOPPERS", "PEDIDOS YA", "RAPPI", "RAPPI UBER EATS PEDIDOS YA", "UBER EATS", "SHOPPER", "WABI") | sda_pd_especifique %in% c("CORNERSHOP", "DELIVERY RAPPI", "PEDIDOS YA", "RAPPI"))
 ```
 
 ```{r}
@@ -36,11 +44,12 @@ table(base_plataformas$sexo)
 ```
 
 ```{r}
-base_amj %>% sjmisc::descr(edad, weights = fact_cal)
+base_plataformas %>% sjmisc::descr(edad, weights = fact_anual)
+base_plataformas %>% sjmisc::frq(i3)
 ```
 
 ```{r}
-base_plataformas %>% sjmisc::descr(as_factor(sexo) , weights = fact_cal)
+base_plataformas %>% sjmisc::descr(as_factor(sexo) , weights = fact_anual)
 ```
 
 ## Guardar base

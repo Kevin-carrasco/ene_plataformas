@@ -1,0 +1,5 @@
+"0","base_plataformas$nacionalidad <- factor(base_plataformas$nacionalidad, labels = C(""Argentina"", ""Chile"", ""Colombia"", ""Paraguay"", ""Perú"", ""Venezuela"")) # migrante
+"
+"2","Error in get(contr, mode = ""function"") : 
+  el objeto 'Chile' de modo 'function' no fue encontrado
+"

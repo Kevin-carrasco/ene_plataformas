@@ -3,7 +3,7 @@
     "path": "~/ene_plataformas/processing/preparacion.Rmd",
     "project_path": "processing/preparacion.Rmd",
     "type": "r_markdown",
-    "hash": "1583142649",
+    "hash": "873783542",
     "contents": "",
     "dirty": false,
     "created": 1702959799618.0,
@@ -13,15 +13,15 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "39,0",
-        "scrollLine": "22"
+        "cursorPosition": "52,0",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1703019375,
+    "lastKnownWriteTime": 1704224714,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1703021194872,
+    "last_content_update": 1704224714675,
     "read_only": false,
     "read_only_alternatives": []
 }
