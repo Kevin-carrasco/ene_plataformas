@@ -7,55 +7,95 @@ date: "2023-12-19"
 ```{r}
 pacman::p_load(haven, dplyr)
 
+# Cargar ene 2020
+data_2020<-read_sav("input/data/original/ano-2020.sav")
+# Cargar ene 2021
+data_2021<-read_sav("input/data/original/ano-2021.sav")
 # Cargar ene 2022
 data_2022<-read_sav("input/data/original/ano-2022.sav")
 # Cargar ene 2023 Agosto-sept-octubre
-data_aso<-read_sav("input/data/original/ene-2023-09-aso.sav")
+#data_aso<-read_sav("input/data/original/ene-2023-09-aso.sav")
 # Cargar ene 2023 junio-agosto-sept
-data_jas<-read_sav("input/data/original/ene-2023-08-jas.sav")
+#data_jas<-read_sav("input/data/original/ene-2023-08-jas.sav")
 # Cargar ene 2022 abril-mayo-junio para comparar con informe
-data_amj<-read_sav("input/data/original/ene-2022-05-amj.sav")
-
+#data_amj<-read_sav("input/data/original/ene-2022-05-amj.sav")
 ```
 
+## Selección plataformas 2020
+
 ```{r}
-base_2022 <- data_2022 %>% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
+base_2020 <- data_2020 %>% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
 
-base_aso <- data_aso %>% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
-base_jas <- data_jas %>% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
-base_amj <- data_amj %>% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
-
-table(base_aso$pd_especifique)
-table(base_aso$sda_pd_especifique)
+table(base_2020$pd_especifique)
+table(base_2020$sda_pd_especifique)
 
 
 # Filtramos manualmente solo apps de delivery
 #base_plataformas <- base_aso %>% filter(pd_especifique %in% c("APLICACION DE PEDIDOS YA", "CORNERSHOP", "EUBER EAST", "JUMBO SHOPPERS", "PEDIDOS YA", "RAPPI", "UBER EATS", "UBEREATS", "WABI") | sda_pd_especifique %in% c("CORNERSHOP", "PEDIDOS YA", "RAPPI", "UBER EATS"))
 
 # Filtramos manualmente solo apps de delivery
-base_plataformas <- base_2022 %>% filter(pd_especifique %in% c("CORNERSHOP", "DELIVERY", "JUMBO SHOPPERS", "PEDIDOS YA", "RAPPI", "RAPPI UBER EATS PEDIDOS YA", "UBER EATS", "SHOPPER", "WABI") | sda_pd_especifique %in% c("CORNERSHOP", "DELIVERY RAPPI", "PEDIDOS YA", "RAPPI"))
+base_plataformas_2020 <- base_2020 %>% filter(pd_especifique %in% c("CORNERSHOP", "CORNERSHOP DELIVERY", "DELIVERY", "INSTAGRAM PEDIDOS YA", "PEDIDOS YA", "RAPPI", "RAPPI DELIVERY", "RAPPI UBEREATS", "UBER EATS", "UBEREATS", "UBEREATS PEDIDOS YA", "WHATSAPP PEDIDOS YA FACEBOOK") | sda_pd_especifique %in% c("UBER EATS", "UBEREATS"))
+```
+
+## Selección plataformas 2021
+
+```{r}
+base_2021 <- data_2021 %>% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
+
+table(base_2021$pd_especifique)
+table(base_2021$sda_pd_especifique)
+
+
+# Filtramos manualmente solo apps de delivery
+#base_plataformas <- base_aso %>% filter(pd_especifique %in% c("APLICACION DE PEDIDOS YA", "CORNERSHOP", "EUBER EAST", "JUMBO SHOPPERS", "PEDIDOS YA", "RAPPI", "UBER EATS", "UBEREATS", "WABI") | sda_pd_especifique %in% c("CORNERSHOP", "PEDIDOS YA", "RAPPI", "UBER EATS"))
+
+# Filtramos manualmente solo apps de delivery
+base_plataformas_2021 <- base_2021 %>% filter(pd_especifique %in% c("CORNERSHOP", "DELIVERY", "DELIVERY RAPPI", "JUMBO SHOOPERS", "JUMBO SHOPPERS", "PEDIDOS YA", "RAPPI", "RAPPI CORNERSHOP", "UBER DELIVERY", "UBER EATS", "UBEREATS", "UBEREATS RAPPI PEDIDOS YA", "SHOPPER") | sda_pd_especifique %in% c("CORNERSHOP", "DELIVERY", "PEDIDOS YA", "UBER EATSRAPID", "UBEREATS"))
+```
+
+## Selección plataformas 2022
+
+```{r}
+base_2022 <- data_2022 %>% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
+
+table(base_2022$pd_especifique)
+table(base_2022$sda_pd_especifique)
+
+
+# Filtramos manualmente solo apps de delivery
+#base_plataformas <- base_aso %>% filter(pd_especifique %in% c("APLICACION DE PEDIDOS YA", "CORNERSHOP", "EUBER EAST", "JUMBO SHOPPERS", "PEDIDOS YA", "RAPPI", "UBER EATS", "UBEREATS", "WABI") | sda_pd_especifique %in% c("CORNERSHOP", "PEDIDOS YA", "RAPPI", "UBER EATS"))
+
+# Filtramos manualmente solo apps de delivery
+base_plataformas_2022 <- base_2022 %>% filter(pd_especifique %in% c("CORNERSHOP", "DELIVERY", "JUMBO SHOPPERS", "PEDIDOS YA", "RAPPI", "RAPPI UBER EATS PEDIDOS YA", "UBER EATS", "SHOPPER", "WABI") | sda_pd_especifique %in% c("CORNERSHOP", "DELIVERY RAPPI", "PEDIDOS YA", "RAPPI"))
 ```
 
 ```{r}
-dim(base_plataformas)
+dim(base_plataformas_2020)
+dim(base_plataformas_2021)
+dim(base_plataformas_2022)
 ```
 ```{r}
-table(base_plataformas$sexo)
+table(base_plataformas_2020$sexo)
+table(base_plataformas_2021$sexo)
+table(base_plataformas_2022$sexo)
 ```
 
 ```{r}
-base_plataformas %>% sjmisc::descr(edad, weights = fact_anual)
-base_plataformas %>% sjmisc::frq(i3)
+base_plataformas_2020 %>% sjmisc::descr(edad, weights = fact_anual)
+base_plataformas_2021 %>% sjmisc::descr(edad, weights = fact_anual)
+base_plataformas_2022 %>% sjmisc::descr(edad, weights = fact_anual)
 ```
 
 ```{r}
-base_plataformas %>% sjmisc::descr(as_factor(sexo) , weights = fact_anual)
+base_plataformas_2022 %>% sjmisc::descr(as_factor(sexo) , weights = fact_anual)
 ```
 
 ## Guardar base
 
 ```{r}
-save(base_plataformas, file="input/data/proc/base_plataformas.RData")
+save(base_plataformas_2020, file="input/data/proc/base_plataformas_2020.RData")
+save(base_plataformas_2021, file="input/data/proc/base_plataformas_2021.RData")
+save(base_plataformas_2022, file="input/data/proc/base_plataformas_2022.RData")
 ```
 
 

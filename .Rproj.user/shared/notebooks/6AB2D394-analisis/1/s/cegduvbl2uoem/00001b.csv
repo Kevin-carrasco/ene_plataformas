@@ -1,0 +1,6 @@
+"0","#label
+base_plataformas$region <- sjlabelled::set_label(x = base_plataformas$region, 
+                      label = get_label(labels$region))
+"
+"2","Error in labels$region : objeto de tipo 'closure' no es subconjunto
+"

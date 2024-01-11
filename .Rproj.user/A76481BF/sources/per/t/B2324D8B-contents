@@ -1,21 +1,38 @@
 ---
 title: "analisis"
-output: html_document
-date: "2023-12-19"
+output:
+  pdf_document:
+    toc: true
+  html_document:
+    toc: true
+    code_folding: hide
+    toc_float:
+      collapsed: true
+      smooth_scroll: false
+      number_sections: true
+date: "2024-01-11"
 ---
+
+```{r include = FALSE}
+knitr::opts_chunk$set(echo=FALSE)
+```
 
 ```{r}
 pacman::p_load(haven, dplyr, survey, srvyr, ggplot2, sjlabelled, summarytools)
 # base procesada
-load(file="input/data/proc/base_plataformas.RData")
+load(file="input/data/proc/base_plataformas_2020.RData")
+load(file="input/data/proc/base_plataformas_2021.RData")
+load(file="input/data/proc/base_plataformas_2022.RData")
 # base original para comparación
 # Cargar ene 2023 Agosto-sept-octubre
 ```
 
+## Variables 2020
 
 ```{r}
-base_plataformas <- base_plataformas %>% set_na(., na = c(77, 88, 99))
-base_plataformas <- base_plataformas %>% dplyr::select(region, 
+base_plataformas_2020 <- base_plataformas_2020 %>% set_na(., na = c(77, 88, 99))
+base_plataformas_2020 <- base_plataformas_2020 %>% dplyr::select(ano=ano_encuesta,
+                                                                 region, 
                                                        tramo_edad, 
                                                        sexo, 
                                                        nacionalidad, 
@@ -29,17 +46,73 @@ base_plataformas <- base_plataformas %>% dplyr::select(region,
                                                        b17_ano, 
                                                        turno,
                                                        fact_anual) %>% as.data.frame()
+labels_2020 <- base_plataformas_2020
+```
+
+## Variables 2021
+
+```{r}
+base_plataformas_2021 <- base_plataformas_2021 %>% set_na(., na = c(77, 88, 99))
+base_plataformas_2021 <- base_plataformas_2021 %>% dplyr::select(ano=ano_encuesta,
+                                                                 region, 
+                                                       tramo_edad, 
+                                                       sexo, 
+                                                       nacionalidad, 
+                                                       cine, 
+                                                       b7a_1, 
+                                                       b7a_2, 
+                                                       b7a_3, 
+                                                       b7b_1, 
+                                                       b8, 
+                                                       ocup_honorarios, 
+                                                       b17_ano, 
+                                                       turno,
+                                                       fact_anual) %>% as.data.frame()
+labels_2021 <- base_plataformas_2021
+```
+
+## Variables 2022
+
+```{r}
+base_plataformas_2022 <- base_plataformas_2022 %>% set_na(., na = c(77, 88, 99))
+base_plataformas_2022 <- base_plataformas_2022 %>% dplyr::select(ano=ano_encuesta,
+                                                                 region, 
+                                                       tramo_edad, 
+                                                       sexo, 
+                                                       nacionalidad, 
+                                                       cine, 
+                                                       b7a_1, 
+                                                       b7a_2, 
+                                                       b7a_3, 
+                                                       b7b_1, 
+                                                       b8, 
+                                                       ocup_honorarios, 
+                                                       b17_ano, 
+                                                       turno,
+                                                       fact_anual) %>% as.data.frame()
+labels_2022 <- base_plataformas_2022
+```
+
+## Unir bases
+
+```{r}
+base_plataformas <- rbind(base_plataformas_2020, base_plataformas_2021, base_plataformas_2022)
 labels <- base_plataformas
 ```
 
+## Recodificación
 
 ```{r}
 # labels
-base_plataformas$region <- factor(base_plataformas$region, labels = c("Antofagasta", "Atacama", "Coquimbo", "Valparaíso", "O'Higgins", "Maule", "Biobío", "Araucanía", "Los Lagos", "Magallanes", "Metropolitana", "Los Ríos", "Arica y Parinacota", "Ñuble"))
-base_plataformas$tramo_edad <- factor(base_plataformas$tramo_edad, labels = c("15 a 19 años", "20 a 24 años", "25 a 29 años", "30 a 34 años", "35 a 39 años", "40 a 44 años", "45 a 49 años", "50 a 54 años", "60 a 64 años"))
+base_plataformas$region <- factor(base_plataformas$region,
+                                  labels = c("Tarapacá", "Antofagasta", "Atacama", "Coquimbo", "Valparaíso", "O'Higgins", "Maule", "Biobío", "Araucanía", "Los Lagos", "Magallanes", "Metropolitana", "Los Ríos", "Arica y Parinacota", "Ñuble")
+                                  )
+base_plataformas$tramo_edad <- factor(base_plataformas$tramo_edad, labels = c("15 a 19 años", "20 a 24 años", "25 a 29 años", "30 a 34 años", "35 a 39 años", "40 a 44 años", "45 a 49 años", "50 a 54 años", "55 a 59 años", "60 a 64 años", "65 o más"))
 base_plataformas$sexo <- factor(base_plataformas$sexo, labels = c("Hombre", "Mujer")) # sexo
-base_plataformas$nacionalidad <- factor(base_plataformas$nacionalidad, labels = c("Argentina", "Chile", "Colombia", "Paraguay", "Perú", "Venezuela")) # migrante
-base_plataformas$cine <- factor(base_plataformas$cine, labels = c("Educación primaria", "Educación secundaria", "Educación técnica", "Educación universitaria", "Postítulos y maestría")) # educacion
+base_plataformas$nacionalidad <- factor(base_plataformas$nacionalidad,
+                                        labels = c("Argentina", "Chile", "Colombia", "Cuba", "Paraguay", "Perú", "Uruguay", "Venezuela") # migrante
+)
+base_plataformas$cine <- factor(base_plataformas$cine, labels = c("Educación primaria", "Educación secundaria", "Educación técnica", "Educación universitaria", "Postítulos y maestría", "No informado")) # educacion
 
 base_plataformas$b7a_1 <- factor(base_plataformas$b7a_1, levels = c(1, 2), labels = c("Si", "No")) # pension
 base_plataformas$b7a_2 <- factor(base_plataformas$b7a_2, levels = c(1, 2), labels = c("Si", "No")) # salud
@@ -88,8 +161,10 @@ base_plataformas$turno <- sjlabelled::set_label(x = base_plataformas$turno,
 
 # Descriptivos condiciones laborales
 
+## 2020
+
 ```{r, results="asis", warning=FALSE}
-df1 <- base_plataformas %>%
+df1 <- base_plataformas %>% filter(ano==2020) %>% 
   dfSummary(.,
                plain.ascii = FALSE,
                style = "grid",
@@ -104,7 +179,54 @@ df1 <- base_plataformas %>%
                max.distinct.values = 15,
             display.labels = TRUE)
 df1$Variable <- NULL
-print(df1, method = "render")
+view(df1, footnote = NA, file = "output/tables/table-2020.html")
+webshot::webshot(url ="output/tables/table-2020.html" ,file ="output/tables/table-2020.png")
+```
+
+## 2021
+
+```{r, results="asis", warning=FALSE}
+df2 <- base_plataformas %>% filter(ano==2021) %>% 
+  dfSummary(.,
+               plain.ascii = FALSE,
+               style = "grid",
+               tmp.img.dir = "/tmp",
+               graph.magnif = 0.75,
+               headings = F,  # encabezado
+               varnumbers = F, # num variable
+               labels.col = T, # etiquetas
+               na.col = T,    # missing
+               graph.col = F, # plot
+               valid.col = T, # n valido
+               max.distinct.values = 15,
+            display.labels = TRUE,
+            footnote=NA)
+df2$Variable <- NULL
+view(df2, footnote = NA, file = "output/tables/table-2021.html")
+webshot::webshot(url ="output/tables/table-2021.html" ,file ="output/tables/table-2021.png")
+```
+
+## 2022
+
+```{r, results="asis", warning=FALSE}
+df3 <- base_plataformas %>% filter(ano==2022) %>% 
+  dfSummary(.,
+               plain.ascii = FALSE,
+               style = "grid",
+               tmp.img.dir = "/tmp",
+               graph.magnif = 0.75,
+               headings = F,  # encabezado
+               varnumbers = F, # num variable
+               labels.col = T, # etiquetas
+               na.col = T,    # missing
+               graph.col = F, # plot
+               valid.col = T, # n valido
+               max.distinct.values = 15,
+            display.labels = TRUE,
+            footnote=NA)
+df3$Variable <- NULL
+view(df3, footnote = NA, file = "output/tables/table-2022.html")
+webshot::webshot(url ="output/tables/table-2022.html" ,file ="output/tables/table-2022.png")
 ```
 
 ```{r}
@@ -115,40 +237,44 @@ ds <- base_plataformas %>% as_survey_design(ids = 1,
 
 ```{r}
 ## Con error estandar
-ds %>% group_by(cine) %>% summarise(educacion=survey_total(na.rm = TRUE))
+ds %>% group_by(cine, ano) %>% summarise(educacion=survey_total(na.rm = TRUE))
 ```
 
 ## Región
 
 ```{r}
-ds %>% group_by(region) %>% 
+ds %>% group_by(region, ano) %>% 
   summarise(region_y=survey_total(na.rm = TRUE, vartype=c("ci"),level=c(0.95))) %>%
   ggplot(aes(x=region,y=region_y,fill=region))+
   geom_bar(stat = "identity") +
   ylab(label="Cantidad")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   geom_errorbar(aes(ymin=region_y_low, ymax=region_y_upp),
                   width=0.2, position=position_dodge(.9)) +
-  guides(fill = FALSE)
+  guides(fill = FALSE) +
+  facet_wrap(~ano)
 ```
 
 ## Edad
 
 ```{r}
-ds %>% group_by(tramo_edad) %>% 
+ds %>% group_by(tramo_edad, ano) %>% 
   summarise(edad=survey_total(na.rm = TRUE, vartype=c("ci"),level=c(0.95))) %>%
   ggplot(aes(x=tramo_edad,y=edad,fill=tramo_edad))+
   geom_bar(stat = "identity") +
   ylab(label="Cantidad")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   geom_errorbar(aes(ymin=edad_low, ymax=edad_upp),
                   width=0.2, position=position_dodge(.9)) +
   guides(fill = FALSE)+
-  scale_x_discrete(labels = get_labels(base_plataformas$tramo_edad))
+  scale_x_discrete(labels = get_labels(base_plataformas$tramo_edad)) +
+  facet_wrap(~ano)
 ```
 
 ## Sexo
 
 ```{r}
-ds %>% group_by(sexo) %>% 
+ds %>% group_by(sexo, ano) %>% 
   summarise(sexo_y=survey_total(na.rm = TRUE, vartype=c("ci"),level=c(0.95))) %>%
   ggplot(aes(x=sexo,y=sexo_y,fill=sexo))+
   geom_bar(stat = "identity") +
@@ -156,26 +282,29 @@ ds %>% group_by(sexo) %>%
   geom_errorbar(aes(ymin=sexo_y_low, ymax=sexo_y_upp),
                   width=0.2, position=position_dodge(.9)) +
   guides(fill = FALSE)+
-  scale_x_discrete(labels = get_labels(base_plataformas$sexo))
+  scale_x_discrete(labels = get_labels(base_plataformas$sexo)) +
+  facet_wrap(~ano)
 ```
 
 ## Nacionalidad
 
 ```{r}
-ds %>% group_by(nacionalidad) %>% 
+ds %>% group_by(nacionalidad, ano) %>% 
   summarise(nacionalidad_y=survey_total(na.rm = TRUE, vartype=c("ci"),level=c(0.95))) %>%
   ggplot(aes(x=nacionalidad,y=nacionalidad_y,fill=nacionalidad))+
   geom_bar(stat = "identity") +
   ylab(label="Cantidad")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   geom_errorbar(aes(ymin=nacionalidad_y_low, ymax=nacionalidad_y_upp),
                   width=0.2, position=position_dodge(.9)) +
-  guides(fill = FALSE)
+  guides(fill = FALSE) +
+  facet_wrap(~ano)
 ```
 
 ## Nivel educacional de trabajadores de plataformas
 
 ```{r}
-ds %>% group_by(cine) %>% 
+ds %>% group_by(cine, ano) %>% 
   summarise(educacion=survey_total(na.rm = TRUE, vartype=c("ci"),level=c(0.95))) %>%
   ggplot(aes(x=cine,y=educacion,fill=cine))+
   geom_bar(stat = "identity") +
@@ -183,13 +312,14 @@ ds %>% group_by(cine) %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   geom_errorbar(aes(ymin=educacion_low, ymax=educacion_upp),
                   width=0.2, position=position_dodge(.9)) +
-  guides(fill = FALSE)
+  guides(fill = FALSE) +
+  facet_wrap(~ano)
 ```
 
 ## Contrato de trabajo de trabajadores de plataformas
 
 ```{r}
-ds %>% group_by(b8) %>% 
+ds %>% group_by(b8, ano) %>% 
   summarise(contrato=survey_total(na.rm = TRUE, vartype=c("ci"),level=c(0.95))) %>%
   ggplot(aes(x=b8,y=contrato,fill=b8))+
   geom_bar(stat = "identity") +
@@ -197,7 +327,8 @@ ds %>% group_by(b8) %>%
   geom_errorbar(aes(ymin=contrato_low, ymax=contrato_upp),
                   width=0.2, position=position_dodge(.9)) +
   guides(fill = FALSE)+
-  scale_x_discrete(labels = get_labels(base_plataformas$b8))
+  scale_x_discrete(labels = get_labels(base_plataformas$b8)) +
+  facet_wrap(~ano)
 ```
 
 
@@ -205,29 +336,28 @@ ds %>% group_by(b8) %>%
 
 ## Exploración relación entre variables
 
-```{r}
+```{r, eval=FALSE}
 sjPlot::sjt.xtab(base_plataformas$sexo, base_plataformas$cine,
                  show.summary = F, emph.total = T, 
                  weight.by = base_plataformas$fact_anual,
                  encoding = "UTF-8")
 ```
 
-
-```{r}
+```{r, eval=FALSE}
 sjPlot::sjt.xtab(base_plataformas$sexo, base_plataformas$b8,
                  show.summary = F, emph.total = T,
                  weight.by = base_plataformas$fact_anual,
                  encoding = "UTF-8")
 ```
 
-```{r}
+```{r, eval=FALSE}
 sjPlot::sjt.xtab(base_plataformas$sexo, base_plataformas$nacionalidad,
                  show.summary = F, emph.total = T,
                  weight.by = base_plataformas$fact_anual,
                  encoding = "UTF-8")
 ```
 
-```{r}
+```{r, eval=FALSE}
 sjPlot::sjt.xtab(base_plataformas$sexo, base_plataformas$tramo_edad,
                  show.summary = F, emph.total = T,
                  weight.by = base_plataformas$fact_anual,

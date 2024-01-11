@@ -1,0 +1,5 @@
+"0","view(df2,file = ""output/tables/table-2020.html"")
+"
+"2","Error in print.summarytools(x, method = method, file = file, append = append,  : 
+  'file' path is not valid - check that directory exists
+"

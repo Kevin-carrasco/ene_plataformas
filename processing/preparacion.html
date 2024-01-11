@@ -357,183 +357,545 @@ display: none;
 
 <pre class="r"><code>pacman::p_load(haven, dplyr)
 
+# Cargar ene 2020
+data_2020&lt;-read_sav(&quot;input/data/original/ano-2020.sav&quot;)
+# Cargar ene 2021
+data_2021&lt;-read_sav(&quot;input/data/original/ano-2021.sav&quot;)
 # Cargar ene 2022
 data_2022&lt;-read_sav(&quot;input/data/original/ano-2022.sav&quot;)
 # Cargar ene 2023 Agosto-sept-octubre
-data_aso&lt;-read_sav(&quot;input/data/original/ene-2023-09-aso.sav&quot;)
+#data_aso&lt;-read_sav(&quot;input/data/original/ene-2023-09-aso.sav&quot;)
 # Cargar ene 2023 junio-agosto-sept
-data_jas&lt;-read_sav(&quot;input/data/original/ene-2023-08-jas.sav&quot;)
+#data_jas&lt;-read_sav(&quot;input/data/original/ene-2023-08-jas.sav&quot;)
 # Cargar ene 2022 abril-mayo-junio para comparar con informe
-data_amj&lt;-read_sav(&quot;input/data/original/ene-2022-05-amj.sav&quot;)</code></pre>
-<pre class="r"><code>base_2022 &lt;- data_2022 %&gt;% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
+#data_amj&lt;-read_sav(&quot;input/data/original/ene-2022-05-amj.sav&quot;)</code></pre>
+<div id="selección-plataformas-2020" class="section level2">
+<h2>Selección plataformas 2020</h2>
+<pre class="r"><code>base_2020 &lt;- data_2020 %&gt;% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
 
-base_aso &lt;- data_aso %&gt;% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
-base_jas &lt;- data_jas %&gt;% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
-base_amj &lt;- data_amj %&gt;% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
-
-table(base_aso$pd_especifique)</code></pre>
+table(base_2020$pd_especifique)</code></pre>
 <pre><code>## 
-##                                                          AIRBNB 
-##                             101                               1 
-##        APLICACION DE PEDIDOS YA                 APLICACION UBER 
-##                               1                               4 
-##                            BEAT                        BEETRACK 
-##                               1                               1 
-##                          CABIFY               CONDUCTOR DE UBER 
-##                               2                               1 
-##                      CORNERSHOP                            DIDI 
-##                               5                               4 
-##                    DIDI INDRIVE                      EUBER EAST 
-##                               1                               1 
-##                        FACEBOOK              FACEBOOK  WHATSAPP 
-##                             319                               1 
-##            FACEBOOK E INSTAGRAM              FACEBOOK INSTAGRAM 
-##                               8                              18 
-##       FACEBOOK INSTAGRAM TIKTOK     FACEBOOK INSTAGRAM WATHSAPP 
-##                               1                               1 
-##      FACEBOOK INSTAGRAM WATSSAP     FACEBOOK INSTAGRAM WHATSAPP 
-##                               1                               2 
-##   FACEBOOK INSTAGRAM Y WHATSAPP   FACEBOOK INSTAGRAM Y WHATSSAP 
-##                               4                               1 
-##      FACEBOOK INSTAGRAM YOUTUBE               FACEBOOK INTAGRAM 
-##                               1                               1 
-##            FACEBOOK MARKETPLACE                  FACEBOOK WASAP 
-##                               2                               2 
-##               FACEBOOK WATHSAPP                FACEBOOK WATTSAP 
-##                               1                               1 
-##               FACEBOOK WHATSAPP     FACEBOOK WHATSAPP INSTAGRAM 
-##                              12                               1 
-##              FACEBOOK Y INSTAGA          FACEBOOK Y MARKETPLACE 
-##                               1                               1 
-##    FACEBOOK Y PAGINA WEB PROPIA             FACEBOOK Y WHATSAPP 
-##                               1                               3 
-##               FACEBOOKINSTAGRAM                       IN DRIVER 
-##                               2                               2 
-##                        INDRIVER                       INSTAGRAM 
-##                              11                             245 
-##             INSTAGRAM  FACEBOOK    INSTAGRAM  FACEBOOK WHATSAPP 
-##                               1                               1 
-##              INSTAGRAM FACEBOOK     INSTAGRAM FACEBOOK WHATSAPP 
-##                              22                               2 
-##   INSTAGRAM FACEBOOK Y WHATSAPP           INSTAGRAM MARKETPLACE 
-##                               3                               1 
-##            INSTAGRAM PAGINA WEB              INSTAGRAM WATHSAPP 
-##                               1                               1 
-##     INSTAGRAM WATHSAPP FACEBOOK       INSTAGRAM WATTSAP PISNESS 
-##                               1                               1 
-##              INSTAGRAM WHATSAPP     INSTAGRAM WHATSAPP FACEBOOK 
-##                               5                               1 
-##            INSTAGRAM Y FACEBOOK               INSTAGRAMWHATSAPP 
-##                              14                               1 
-##             INSTAGRAN  FACEBOOK     INSTAGRAN FACEBOOK WHATSAPP 
-##                               1                               1 
-##              INSTAURAR FACEBOOK                  JUMBO SHOPPERS 
-##                               1                               2 
-##                     MARKETPLACE            MARKETPLACE FACEBOOK 
-##                               8                               1 
-##           MARKETPLACE INSTAGRAM       MARKETPLACE MERCADO LIBRE 
-##                               1                               1 
-##         MERCADO LIBRE INSTAGRAM                    MERCADOLIBRE 
-##                               1                               4 
-##                      PEDIDOS YA                           RAPPI 
-##                              11                               4 
-##   REDES SOCIALES FACE INSTAGRAM TIENE TODO WHATSAPP E INSTAGRAM 
-##                               1                               1 
-##                          TWITCH                            UBER 
-##                               2                             103 
-##                       UBER EATS              UBER INDRIVER DIDI 
-##                               5                               1 
-##                     UBER Y DIDI                        UBEREATS 
-##                               1                               1 
-##                            WABI                WATHSAP FACEBOOK 
-##                               1                               1 
-##               WATHSAPP FACEBOOK              WATHSAPP INSTAGRAM 
-##                               7                               4 
-##     WATHSAPP INSTAGRAM FACEBOOK                WATTSAP FACEBOOK 
-##                               3                               1 
-##                        WHATSAPP               WHATSAPP FACEBOOK 
-##                             259                               3 
-##   WHATSAPP FACEBOOK E INSTAGRAM     WHATSAPP FACEBOOK INSTAGRAM 
-##                               3                               1 
-##              WHATSAPP INSTAGRAM           WHATSAPP TEAMS GOOGLE 
-##                               1                               1 
-##                  WHATSAPP VIDEO                      WHATSAPP Y 
-##                               1                               1 
-##             WHATSAPP Y FACEBOOK              WSP MAIL INSTAGRAM 
-##                               3                               1 
-##                  ZOOM INSTAGRAM 
-##                               1</code></pre>
-<pre class="r"><code>table(base_aso$sda_pd_especifique)</code></pre>
+##                                                                  AIRBNB 
+##                                  97                                   1 
+##                                BEAT                     BEATS UBER DIDI 
+##                                   2                                   1 
+##                             BOOKING                              CABIFY 
+##                                   2                                   6 
+##                          CORNERSHOP                 CORNERSHOP DELIVERY 
+##                                  22                                   1 
+##                            DELIVERY                                DIDI 
+##                                   2                                   9 
+##                           EASY TAXY                            FACEBOOK 
+##                                   1                                 315 
+##                  FACEBOOK INSTAGRAM          FACEBOOK INSTAGRAM TWITTER 
+##                                  62                                   1 
+##         FACEBOOK INSTAGRAM WHATSAPP          FACEBOOK INSTAGRAMWHATSAAP 
+##                                   2                                   1 
+##                FACEBOOK MARKETPLACE               FACEBOOK MERCADOLIBRE 
+##                                   2                                   1 
+##                   FACEBOOK WHARSAPP                   FACEBOOK WHATSAPP 
+##                                   1                                  23 
+##         FACEBOOK WHATSAPP INSTAGRAM                       FACEBOOK YAPO 
+##                                   5                                   1 
+## FACEBOOK YAPO WHATSAPP MERCADOLIBRE                            INDRIVER 
+##                                   1                                   1 
+##                           INSTAGRAM                  INSTAGRAM FACEBOOK 
+##                                  70                                  17 
+##         INSTAGRAM FACEBOOK WHATSAPP                  INSTAGRAM FANSPAGE 
+##                                   2                                   1 
+##               INSTAGRAM MARKETPLACE                INSTAGRAM PEDIDOS YA 
+##                                   1                                   2 
+##                    INSTAGRAM TWITER                  INSTAGRAM WHATSAPP 
+##                                   1                                   4 
+##         INSTAGRAM WHATSAPP FACEBOOK                               JUMBO 
+##                                   2                                   1 
+##                         MARKETPLACE                MARKETPLACE FACEBOOK 
+##                                  10                                   3 
+##               MARKETPLACE INSTAGRAM                  MERCADO LIBRE YAPO 
+##                                   2                                   1 
+##                        MERCADOLIBRE                          PEDIDOS YA 
+##                                   7                                  16 
+##                               RAPPI                      RAPPI DELIVERY 
+##                                   4                                   2 
+##                      RAPPI UBEREATS                                UBER 
+##                                   1                                 173 
+##                           UBER BEAT                      UBER CONDUCTOR 
+##                                   1                                   1 
+##                           UBER DIDI                      UBER DIDI BEAT 
+##                                   1                                   1 
+##                          UBER DRIVE                           UBER EATS 
+##                                   1                                   1 
+##                            UBEREATS                 UBEREATS PEDIDOS YA 
+##                                  19                                   2 
+##                            WHATSAPP                  WHATSAPP FACEBOOCK 
+##                                 138                                   1 
+##                   WHATSAPP FACEBOOK         WHATSAPP FACEBOOK INSTAGRAM 
+##                                  14                                   1 
+##                  WHATSAPP INSTAGRAM        WHATSAPP PEDIDOS YA FACEBOOK 
+##                                   3                                   1 
+##                    WHATSAPP YOUTUBE                                YAPO 
+##                                   1                                   5 
+##                       YAPO FACEBOOK                    YOUTUBE FACEBOOK 
+##                                   1                                   1 
+##                   YOUTUBE INSTAGRAM                   YOUTUBE MESSENGER 
+##                                   1                                   1</code></pre>
+<pre class="r"><code>table(base_2020$sda_pd_especifique)</code></pre>
 <pre><code>## 
-##                                                          CORNERSHOP 
-##                              1138                                 1 
-##                              DIDI                          FACEBOOK 
-##                                 1                                23 
-##              FACEBOOK E INSTAGRAM                FACEBOOK INSTAGRAM 
-##                                 1                                 5 
-##             FACEBOOK MARKET PLACE                    FACEBOOK WASAP 
-##                                 1                                 1 
-##                 FACEBOOK WHATSAPP               FACEBOOK Y WHATSAPP 
-##                                 1                                 1 
-##                 FACEBOOKINSTAGRAM         GOOGLE FACEBOOK INSTAGRAM 
-##                                 1                                 1 
-##                          INDRIVER                         INSTAGRAM 
-##                                 1                                44 
-##                INSTAGRAM FACEBOOK        INSTAGRAM FACEBOOK Y WASAP 
-##                                 3                                 1 
-##     INSTAGRAM FACEBOOK Y WHATSAPP              INSTAGRAM Y FACEBOOK 
-##                                 1                                 3 
-##                       MARKETPLACE                        PEDIDOS YA 
-##                                 2                                 1 
-##                             RAPPI REDES SOCIALES FACEBOOK INSTAGRAM 
-##                                 1                                 1 
-##                            TIKTOK                              UBER 
-##                                 1                                10 
-##                         UBER EATS                   WASSAP FACEBOOK 
-##                                 1                                 1 
-##       WATHSAPP FACEBOOK INSTAGRAM                          WHATSAPP 
-##                                 1                                16 
-##                 WHATSAPP BUSINESS 
-##                                 1</code></pre>
+##                                                  AIRBNB 
+##                         968                           1 
+##                        DIDI                    FACEBOOK 
+##                           4                          22 
+##          FACEBOOK INSTAGRAM FACEBOOK INSTAGRAM WHATSAPP 
+##                           7                           2 
+##        FACEBOOK MARKETPLACE           FACEBOOK WHATSAPP 
+##                           1                           4 
+##                   INSTAGRAM          INSTAGRAM FACEBOOK 
+##                          13                           2 
+##          INSTAGRAM WHATSAPP                 MARKETPLACE 
+##                           1                           1 
+##        TOC TOC MERCADOLIBRE                        UBER 
+##                           1                          26 
+##                 UBER AMISER              UBER BEAT DIDI 
+##                           1                           1 
+##                   UBER EATS                    UBER HIT 
+##                           1                           1 
+##                    UBEREATS                       UBERS 
+##                           1                           1 
+##                    WHATSAPP           WHATSAPP FACEBOOK 
+##                          13                           1 
+##          WHATSAPP INSTAGRAM               YAPO FACEBOOK 
+##                           1                           1</code></pre>
 <pre class="r"><code># Filtramos manualmente solo apps de delivery
 #base_plataformas &lt;- base_aso %&gt;% filter(pd_especifique %in% c(&quot;APLICACION DE PEDIDOS YA&quot;, &quot;CORNERSHOP&quot;, &quot;EUBER EAST&quot;, &quot;JUMBO SHOPPERS&quot;, &quot;PEDIDOS YA&quot;, &quot;RAPPI&quot;, &quot;UBER EATS&quot;, &quot;UBEREATS&quot;, &quot;WABI&quot;) | sda_pd_especifique %in% c(&quot;CORNERSHOP&quot;, &quot;PEDIDOS YA&quot;, &quot;RAPPI&quot;, &quot;UBER EATS&quot;))
 
 # Filtramos manualmente solo apps de delivery
-base_plataformas &lt;- base_2022 %&gt;% filter(pd_especifique %in% c(&quot;CORNERSHOP&quot;, &quot;DELIVERY&quot;, &quot;JUMBO SHOPPERS&quot;, &quot;PEDIDOS YA&quot;, &quot;RAPPI&quot;, &quot;RAPPI UBER EATS PEDIDOS YA&quot;, &quot;UBER EATS&quot;, &quot;SHOPPER&quot;, &quot;WABI&quot;) | sda_pd_especifique %in% c(&quot;CORNERSHOP&quot;, &quot;DELIVERY RAPPI&quot;, &quot;PEDIDOS YA&quot;, &quot;RAPPI&quot;))</code></pre>
-<pre class="r"><code>dim(base_plataformas)</code></pre>
+base_plataformas_2020 &lt;- base_2020 %&gt;% filter(pd_especifique %in% c(&quot;CORNERSHOP&quot;, &quot;CORNERSHOP DELIVERY&quot;, &quot;DELIVERY&quot;, &quot;INSTAGRAM PEDIDOS YA&quot;, &quot;PEDIDOS YA&quot;, &quot;RAPPI&quot;, &quot;RAPPI DELIVERY&quot;, &quot;RAPPI UBEREATS&quot;, &quot;UBER EATS&quot;, &quot;UBEREATS&quot;, &quot;UBEREATS PEDIDOS YA&quot;, &quot;WHATSAPP PEDIDOS YA FACEBOOK&quot;) | sda_pd_especifique %in% c(&quot;UBER EATS&quot;, &quot;UBEREATS&quot;))</code></pre>
+</div>
+<div id="selección-plataformas-2021" class="section level2">
+<h2>Selección plataformas 2021</h2>
+<pre class="r"><code>base_2021 &lt;- data_2021 %&gt;% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
+
+table(base_2021$pd_especifique)</code></pre>
+<pre><code>## 
+##                                             
+##                                         168 
+##                                      AIRBNB 
+##                                           1 
+##                                        BEAT 
+##                                           4 
+##                                   BEAT UBER 
+##                                           1 
+##                                     BOOKING 
+##                                           1 
+##                                      CABIFY 
+##                                           4 
+##                                   CAMION GO 
+##                                           1 
+##                                  CORNERSHOP 
+##                                          61 
+##                                    DELIVERY 
+##                                           1 
+##                              DELIVERY RAPPI 
+##                                           1 
+##                                        DIDI 
+##                                          20 
+##                                    EBACK CL 
+##                                           1 
+##                                    FACEBOOK 
+##                                         379 
+##                          FACEBOOK INSTAGRAM 
+##                                          90 
+##              FACEBOOK INSTAGRAM MARKETPLACE 
+##                                           1 
+##                 FACEBOOK INSTAGRAM WHATSAPP 
+##                                          11 
+##                   FACEBOOK INSTAGRAMWHATSAP 
+##                                           1 
+##                   FACEBOOK INSTAGRANWHATSAP 
+##                                           1 
+##                 FACEBOOK INSTARGRAM TWIITER 
+##                                           1 
+##                        FACEBOOK MARKETPLACE 
+##                                         382 
+##              FACEBOOK MARKETPLACE INSTAGRAM 
+##                                          39 
+##     FACEBOOK MARKETPLACE INSTAGRAM WHATSAPP 
+##                                           6 
+## FACEBOOK MARKETPLACE MERCADOLIBRE INSTAGRAM 
+##                                           1 
+##               FACEBOOK MARKETPLACE WHATSAPP 
+##                                          14 
+##                          FACEBOOK MESSENGER 
+##                                           1 
+##                             FACEBOOK TWITER 
+##                                           1 
+##                            FACEBOOK TWITTER 
+##                                           1 
+##                           FACEBOOK WHATSAPP 
+##                                          68 
+##                 FACEBOOK WHATSAPP INSTAGRAM 
+##                                           3 
+##                               FACEBOOK YAPO 
+##                                           1 
+##                                         FEX 
+##                                           1 
+##                                   IN DRIVER 
+##                                           3 
+##                              IN DRIVER DIDI 
+##                                           1 
+##                                    INDRIVER 
+##                                           2 
+##                                   INSTAGRAM 
+##                                         292 
+##                          INSTAGRAM FACEBOOK 
+##                                          38 
+##                 INSTAGRAM FACEBOOK WHATSAPP 
+##                                          10 
+##                       INSTAGRAM MARKETPLACE 
+##                                           2 
+##                          INSTAGRAM WHATSAPP 
+##                                          11 
+##                 INSTAGRAM WHATSAPP FACEBOOK 
+##                                           6 
+##                              JUMBO SHOOPERS 
+##                                           1 
+##                              JUMBO SHOPPERS 
+##                                           1 
+##                                 MARKETPLACE 
+##                                           4 
+##                        MARKETPLACE FACEBOOK 
+##                                           1 
+##                        MARKETPLACE WHATSAPP 
+##                                           1 
+##                                MERCADOLIBRE 
+##                                          11 
+##             MERCADOLIBRE FACEBOOK INSTAGRAM 
+##                                           1 
+##                        MERCADOLIBRE SHOPIFY 
+##                                           1 
+##                                  PEDIDOS YA 
+##                                          44 
+##                                       PULSE 
+##                                           1 
+##                                       RAPPI 
+##                                          16 
+##                            RAPPI CORNERSHOP 
+##                                           1 
+##                                  ROADRUNNER 
+##                                           1 
+##                                        SAWU 
+##                                           1 
+##                                     SHOPPER 
+##                                           2 
+##                                      SIGNAL 
+##                                           1 
+##                                    TIMEJOBS 
+##                                           1 
+##                                      TWITCH 
+##                                           1 
+##                                        UBER 
+##                                         269 
+##                                 UBER CABIFY 
+##                                           1 
+##                               UBER DELIVERY 
+##                                           1 
+##                                   UBER DIDI 
+##                                           1 
+##                                  UBER DRIVE 
+##                                           1 
+##                                 UBER DRIVER 
+##                                           2 
+##                                   UBER EATS 
+##                                           5 
+##                                    UBEREATS 
+##                                          13 
+##                   UBEREATS RAPPI PEDIDOS YA 
+##                                           1 
+##                                    WHATSAPP 
+##                                         939 
+##                           WHATSAPP FACEBOOK 
+##                                          45 
+##                 WHATSAPP FACEBOOK INSTAGRAM 
+##                                          10 
+##                          WHATSAPP INSTAGRAM 
+##                                          12 
+##                 WHATSAPP INSTAGRAM FACEBOOK 
+##                                           8 
+##         WHATSAPP INSTAGRAM FACEBOOK TWITTER 
+##                                           1 
+##                               WHATSAPP UBER 
+##                                           1 
+##                             WHATSAPP VENTAS 
+##                                           1 
+##                                        YAPO 
+##                                           7 
+##                           YAPO MERCADOLIBRE 
+##                                           2 
+##        YAPO MERCADOLIBRE FACEBOOK INSTAGRAM 
+##                                           1 
+##                                     YOUTUBE 
+##                                           7</code></pre>
+<pre class="r"><code>table(base_2021$sda_pd_especifique)</code></pre>
+<pre><code>## 
+##                                                          BEAT 
+##                           2819                              1 
+##                         CABIFY                     CORNERSHOP 
+##                              1                              5 
+##                       DELIVERY                           DIDI 
+##                              1                              1 
+##                       FACEBOOK             FACEBOOK INSTAGRAM 
+##                             34                              9 
+##    FACEBOOK INSTAGRAM WHATSAPP           FACEBOOK MARKETPLACE 
+##                              1                             37 
+## FACEBOOK MARKETPLACE INSTAGRAM  FACEBOOK MARKETPLACE WHATSAPP 
+##                              3                              1 
+##              FACEBOOK WHATSAPP    FACEBOOK WHATSAPP INSTAGRAM 
+##                              3                              1 
+##                      IN DRIVER                       INDRIVER 
+##                              1                              1 
+##                      INSTAGRAM             INSTAGRAM FACEBOOK 
+##                             44                              2 
+##                    MARKETPLACE                   MERCADOLIBRE 
+##                              1                              1 
+##                     PEDIDOS YA                           UBER 
+##                              2                             10 
+##                 UBER EATSRAPID                       UBEREATS 
+##                              1                              2 
+##                       WHATSAPP              WHATSAPP FACEBOOK 
+##                             61                              3 
+##    WHATSAPP INSTAGRAM FACEBOOK                      YAPOREDES 
+##                              2                              1</code></pre>
+<pre class="r"><code># Filtramos manualmente solo apps de delivery
+#base_plataformas &lt;- base_aso %&gt;% filter(pd_especifique %in% c(&quot;APLICACION DE PEDIDOS YA&quot;, &quot;CORNERSHOP&quot;, &quot;EUBER EAST&quot;, &quot;JUMBO SHOPPERS&quot;, &quot;PEDIDOS YA&quot;, &quot;RAPPI&quot;, &quot;UBER EATS&quot;, &quot;UBEREATS&quot;, &quot;WABI&quot;) | sda_pd_especifique %in% c(&quot;CORNERSHOP&quot;, &quot;PEDIDOS YA&quot;, &quot;RAPPI&quot;, &quot;UBER EATS&quot;))
+
+# Filtramos manualmente solo apps de delivery
+base_plataformas_2021 &lt;- base_2021 %&gt;% filter(pd_especifique %in% c(&quot;CORNERSHOP&quot;, &quot;DELIVERY&quot;, &quot;DELIVERY RAPPI&quot;, &quot;JUMBO SHOOPERS&quot;, &quot;JUMBO SHOPPERS&quot;, &quot;PEDIDOS YA&quot;, &quot;RAPPI&quot;, &quot;RAPPI CORNERSHOP&quot;, &quot;UBER DELIVERY&quot;, &quot;UBER EATS&quot;, &quot;UBEREATS&quot;, &quot;UBEREATS RAPPI PEDIDOS YA&quot;, &quot;SHOPPER&quot;) | sda_pd_especifique %in% c(&quot;CORNERSHOP&quot;, &quot;DELIVERY&quot;, &quot;PEDIDOS YA&quot;, &quot;UBER EATSRAPID&quot;, &quot;UBEREATS&quot;))</code></pre>
+</div>
+<div id="selección-plataformas-2022" class="section level2">
+<h2>Selección plataformas 2022</h2>
+<pre class="r"><code>base_2022 &lt;- data_2022 %&gt;% dplyr::filter(plataformas_digitales==1 | sda_pd == 1) # Primera o segunda actividad en aplicación o internet
+
+table(base_2022$pd_especifique)</code></pre>
+<pre><code>## 
+##                                                  
+##                                              250 
+##                                             BEAT 
+##                                                4 
+##                                           CABIFY 
+##                                                1 
+##                                      CABIFY UBER 
+##                                                1 
+##                                       CORNERSHOP 
+##                                               33 
+##                                         DELIVERY 
+##                                                2 
+##                                             DIDI 
+##                                               24 
+##                                   DIDI BEAT UBER 
+##                                                1 
+##                                        DIDI UBER 
+##                                                1 
+##                                           DRIVER 
+##                                                1 
+##                                         FACEBOOK 
+##                                              325 
+##                               FACEBOOK INSTAGRAM 
+##                                               76 
+##                      FACEBOOK INSTAGRAM WHATSAPP 
+##                                               10 
+##                             FACEBOOK MARKETPLACE 
+##                                              554 
+##                   FACEBOOK MARKETPLACE INSTAGRAM 
+##                                               44 
+##          FACEBOOK MARKETPLACE INSTAGRAM WHATSAPP 
+##                                               10 
+## FACEBOOK MARKETPLACE INSTAGRAM WHATSAPP FACEBOOK 
+##                                                1 
+##                    FACEBOOK MARKETPLACE WHATSAPP 
+##                                                9 
+##           FACEBOOK MARKETPLACE WHATSAPP FACEBOOK 
+##                                                1 
+##          FACEBOOK MARKETPLACE WHATSAPP INSTAGRAM 
+##                                                1 
+##                                FACEBOOK WHATSAPP 
+##                                               50 
+##                      FACEBOOK WHATSAPP INSTAGRAM 
+##                                                5 
+##                         FACEBOOK WHATSAPP TIKTOK 
+##                                                1 
+##                                        IN DRIVER 
+##                                               25 
+##                                         INDRIVER 
+##                                                1 
+##                                        INSTAGRAM 
+##                                              545 
+##                               INSTAGRAM FACEBOOK 
+##                                               35 
+##                   INSTAGRAM FACEBOOK MARKETPLACE 
+##                                                1 
+##                      INSTAGRAM FACEBOOK WHATSAPP 
+##                                               16 
+##              INSTAGRAM FACEBOOK WHATSAPP TWITTER 
+##                                                1 
+##                            INSTAGRAM MARKETPLACE 
+##                                                2 
+##                               INSTAGRAM WHATSAPP 
+##                                                9 
+##                      INSTAGRAM WHATSAPP FACEBOOK 
+##                                                1 
+##                                   JUMBO SHOPPERS 
+##                                                2 
+##                                      MARKETPLACE 
+##                                                9 
+##                             MARKETPLACE FACEBOOK 
+##                                                1 
+##                            MARKETPLACE INSTAGRAM 
+##                                                3 
+##                                     MERCADOLIBRE 
+##                                               15 
+##                                       PEDIDOS YA 
+##                                               39 
+##                                           PICKER 
+##                                                1 
+##                                            RAPPI 
+##                                               24 
+##                       RAPPI UBER EATS PEDIDOS YA 
+##                                                1 
+##                                             SAWU 
+##                                                1 
+##                                          SHOPPER 
+##                                                1 
+##                                           SIGNAL 
+##                                                1 
+##                                         TELEGRAM 
+##                                                3 
+##                                           TIKTOK 
+##                                                2 
+##                                         TIMEJOBS 
+##                                                1 
+##                                           TITASK 
+##                                                1 
+##                                           TWITCH 
+##                                                4 
+##                                             UBER 
+##                                              304 
+##                                        UBER DIDI 
+##                                                3 
+##                                 UBER DIDI CABIFY 
+##                                                1 
+##                                      UBER DRIVER 
+##                                                2 
+##                                        UBER EATS 
+##                                               22 
+##                                         WHATSAPP 
+##                                              995 
+##                                WHATSAPP FACEBOOK 
+##                                               37 
+##                      WHATSAPP FACEBOOK INSTAGRAM 
+##                                               19 
+##                               WHATSAPP INSTAGRAM 
+##                                                9 
+##                      WHATSAPP INSTAGRAM FACEBOOK 
+##                                               14 
+##                      WHATSAPP INSTAGRAM WHATSAPP 
+##                                                1 
+##                                    WHATSAPP UBER 
+##                                                1 
+##                                      WHAWHATSAPP 
+##                                                1 
+##                                             YAPO 
+##                                                6 
+##                                    YAPO FACEBOOK 
+##                                                1 
+##                                          YOUTUBE 
+##                                                2 
+##                                YOUTUBE INSTAGRAM 
+##                                                1</code></pre>
+<pre class="r"><code>table(base_2022$sda_pd_especifique)</code></pre>
+<pre><code>## 
+##                                                             BOOSMAP 
+##                              3259                                 1 
+##                            CABIFY                        CORNERSHOP 
+##                                 1                                 2 
+##                    DELIVERY RAPPI                              DIDI 
+##                                 1                                 1 
+##                          FACEBOOK                FACEBOOK INSTAGRAM 
+##                                38                                12 
+##              FACEBOOK MARKETPLACE    FACEBOOK MARKETPLACE INSTAGRAM 
+##                                57                                 6 
+## FACEBOOK MARKETPLACE MERCADOLIBRE     FACEBOOK MARKETPLACE WHATSAPP 
+##                                 1                                 1 
+##                 FACEBOOK WHATSAPP                         IN DRIVER 
+##                                 3                                 5 
+##                         INSTAGRAM                INSTAGRAM FACEBOOK 
+##                                80                                 2 
+##       INSTAGRAM FACEBOOK WHATSAPP                INSTAGRAM WHATSAPP 
+##                                 1                                 1 
+##                         LAVAMEAPP                  MARKETPLACE YAPO 
+##                                 1                                 1 
+##                      MERCADOLIBRE                        PEDIDOS YA 
+##                                 4                                 5 
+##                             RAPPI                              UBER 
+##                                 1                                23 
+##                         UBER DIDI                          WHATSAPP 
+##                                 2                                51 
+##                 WHATSAPP FACEBOOK       WHATSAPP FACEBOOK INSTAGRAM 
+##                                 6                                 1 
+##                WHATSAPP INSTAGRAM       WHATSAPP INSTAGRAM FACEBOOK 
+##                                 1                                 1</code></pre>
+<pre class="r"><code># Filtramos manualmente solo apps de delivery
+#base_plataformas &lt;- base_aso %&gt;% filter(pd_especifique %in% c(&quot;APLICACION DE PEDIDOS YA&quot;, &quot;CORNERSHOP&quot;, &quot;EUBER EAST&quot;, &quot;JUMBO SHOPPERS&quot;, &quot;PEDIDOS YA&quot;, &quot;RAPPI&quot;, &quot;UBER EATS&quot;, &quot;UBEREATS&quot;, &quot;WABI&quot;) | sda_pd_especifique %in% c(&quot;CORNERSHOP&quot;, &quot;PEDIDOS YA&quot;, &quot;RAPPI&quot;, &quot;UBER EATS&quot;))
+
+# Filtramos manualmente solo apps de delivery
+base_plataformas_2022 &lt;- base_2022 %&gt;% filter(pd_especifique %in% c(&quot;CORNERSHOP&quot;, &quot;DELIVERY&quot;, &quot;JUMBO SHOPPERS&quot;, &quot;PEDIDOS YA&quot;, &quot;RAPPI&quot;, &quot;RAPPI UBER EATS PEDIDOS YA&quot;, &quot;UBER EATS&quot;, &quot;SHOPPER&quot;, &quot;WABI&quot;) | sda_pd_especifique %in% c(&quot;CORNERSHOP&quot;, &quot;DELIVERY RAPPI&quot;, &quot;PEDIDOS YA&quot;, &quot;RAPPI&quot;))</code></pre>
+<pre class="r"><code>dim(base_plataformas_2020)</code></pre>
+<pre><code>## [1]  75 165</code></pre>
+<pre class="r"><code>dim(base_plataformas_2021)</code></pre>
+<pre><code>## [1] 159 203</code></pre>
+<pre class="r"><code>dim(base_plataformas_2022)</code></pre>
 <pre><code>## [1] 133 173</code></pre>
-<pre class="r"><code>table(base_plataformas$sexo)</code></pre>
+<pre class="r"><code>table(base_plataformas_2020$sexo)</code></pre>
+<pre><code>## 
+##  1  2 
+## 52 23</code></pre>
+<pre class="r"><code>table(base_plataformas_2021$sexo)</code></pre>
+<pre><code>## 
+##   1   2 
+## 119  40</code></pre>
+<pre class="r"><code>table(base_plataformas_2022$sexo)</code></pre>
 <pre><code>## 
 ##   1   2 
 ## 105  28</code></pre>
-<pre class="r"><code>base_plataformas %&gt;% sjmisc::descr(edad, weights = fact_anual)</code></pre>
+<pre class="r"><code>base_plataformas_2020 %&gt;% sjmisc::descr(edad, weights = fact_anual)</code></pre>
+<pre><code>## 
+## ## Basic descriptive statistics
+## 
+##   var    type label     n NA.prc  mean   sd   se      range iqr skew
+##  edad numeric  Edad 11399      0 33.46 9.96 1.15 42 (18-60)  14 0.95</code></pre>
+<pre class="r"><code>base_plataformas_2021 %&gt;% sjmisc::descr(edad, weights = fact_anual)</code></pre>
+<pre><code>## 
+## ## Basic descriptive statistics
+## 
+##   var    type label     n NA.prc  mean   sd   se      range  iqr skew
+##  edad numeric  Edad 22327      0 34.09 9.35 0.74 46 (19-65) 13.5 0.84</code></pre>
+<pre class="r"><code>base_plataformas_2022 %&gt;% sjmisc::descr(edad, weights = fact_anual)</code></pre>
 <pre><code>## 
 ## ## Basic descriptive statistics
 ## 
 ##   var    type label     n NA.prc  mean   sd   se      range iqr skew
 ##  edad numeric  Edad 19140      0 30.53 7.45 0.65 46 (17-63)   9 1.25</code></pre>
-<pre class="r"><code>base_plataformas %&gt;% sjmisc::frq(i3)</code></pre>
-<pre><code>## i3. ¿Cuál es el nombre de la empresa, negocio o institución que le paga su sueld (i3) &lt;numeric&gt; 
-## # total N=133 valid N=63 mean=9.48 sd=26.31
-## 
-## Value |                          Label |  N | Raw % | Valid % | Cum. %
-## ----------------------------------------------------------------------
-##     1 | (Informante identifica nombre) | 56 | 42.11 |   88.89 |  88.89
-##     2 |                No tiene nombre |  1 |  0.75 |    1.59 |  90.48
-##     3 |         Es un hogar particular |  0 |  0.00 |    0.00 |  90.48
-##     4 |   Trabaja para otro asalariado |  0 |  0.00 |    0.00 |  90.48
-##    88 |                        No sabe |  5 |  3.76 |    7.94 |  98.41
-##    99 |                    No responde |  1 |  0.75 |    1.59 | 100.00
-##  &lt;NA&gt; |                           &lt;NA&gt; | 70 | 52.63 |    &lt;NA&gt; |   &lt;NA&gt;</code></pre>
-<pre class="r"><code>base_plataformas %&gt;% sjmisc::descr(as_factor(sexo) , weights = fact_anual)</code></pre>
+<pre class="r"><code>base_plataformas_2022 %&gt;% sjmisc::descr(as_factor(sexo) , weights = fact_anual)</code></pre>
 <pre><code>## 
 ## ## Basic descriptive statistics
 ## 
 ##              var        type label     n NA.prc mean   sd   se   range iqr skew
 ##  as_factor(sexo) categorical  Sexo 19140      0 1.14 0.34 0.03 1 (1-2)   0 1.44</code></pre>
+</div>
 <div id="guardar-base" class="section level2">
 <h2>Guardar base</h2>
-<pre class="r"><code>save(base_plataformas, file=&quot;input/data/proc/base_plataformas.RData&quot;)</code></pre>
+<pre class="r"><code>save(base_plataformas_2020, file=&quot;input/data/proc/base_plataformas_2020.RData&quot;)
+save(base_plataformas_2021, file=&quot;input/data/proc/base_plataformas_2021.RData&quot;)
+save(base_plataformas_2022, file=&quot;input/data/proc/base_plataformas_2022.RData&quot;)</code></pre>
 </div>
 
 
